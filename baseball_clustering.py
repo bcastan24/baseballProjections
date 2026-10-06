@@ -1,4 +1,5 @@
 # This file was adapted from a ipynb that I wrote on Google Colab
+# After adapting it from ipynb I wrote some more functionality in VSCode before uploading this product to a GitHub repo
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors
@@ -213,7 +214,7 @@ def calculate_full_projections(similar_players_df, full_df, stat_cols=['OBP_plus
         target_col = f'{col}_next'
         base_value = target_player[col]
         
-        # --- 1. Percentile Projections (Floor, Median, Ceiling) ---
+        # Percentile Projections (Floor, Median, Ceiling)
         sorted_neighbors = valid_neighbors.sort_values(by=target_col)
         cumulative_weight_pct = sorted_neighbors['weight'].cumsum() / total_weight
         
@@ -221,7 +222,7 @@ def calculate_full_projections(similar_players_df, full_df, stat_cols=['OBP_plus
         projections[f'{col}_Median_50th'] = round(sorted_neighbors.loc[cumulative_weight_pct >= 0.50, target_col].iloc[0], 1)
         projections[f'{col}_Ceiling_90th'] = round(sorted_neighbors.loc[cumulative_weight_pct >= 0.90, target_col].iloc[0], 1)
 
-        # --- 2. Dynamic Probabilities ---
+        # Dynamic Probabilities
         # Did the neighbors improve at all?
         improve_weight = valid_neighbors.loc[valid_neighbors[target_col] > base_value, 'weight'].sum()
         
